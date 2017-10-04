@@ -1,7 +1,7 @@
 ;; Add MELPA
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-		    (not (gnutls-available-p))))
+                    (not (gnutls-available-p))))
        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
   (add-to-list 'package-archives (cons "melpa" url) t))
 (when (< emacs-major-version 24)
@@ -55,9 +55,16 @@
 
 (setq debug-on-error t)
 
+(setq-default tab-width 2)
+(setq-default indent-tabs-mode nil)
+
 (defun my-setup-indent (n)
   ;; java/c/c++
   (setq-local c-basic-offset n)
+
+  ;; groovy
+  (setq-local groovy-indent-offset n)
+
   ;; web development
   (setq-local coffee-tab-width n) ; coffeescript
   (setq-local javascript-indent-level n) ; javascript-mode
