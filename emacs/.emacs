@@ -91,3 +91,6 @@
 
 ;; Recognize .tf as HCL mode
 (add-to-list 'auto-mode-alist '("\\.tf\\'" . hcl-mode))
+
+;; Highlight matching parenthesis
+(show-paren-mode 1)
