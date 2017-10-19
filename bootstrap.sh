@@ -18,6 +18,7 @@ sudo apt-get install \
      python-pip \
      qalculate \
      htop \
+     jq \
      build-essential \
      libssl-dev \
      libreadline-dev \

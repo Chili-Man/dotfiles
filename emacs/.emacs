@@ -17,6 +17,8 @@
 ;;  yaml-mode
 ;;  dockerfile-mode
 ;;  docker-compose-mode
+;;  yafolding
+;;  origami
 
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
@@ -40,7 +42,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (tabbar markdown-mode docker-compose-mode dockerfile-mode monokai-theme solarized-theme zenburn-theme hcl-mode go-mode groovy-mode yaml-mode))))
+    (yafolding tabbar markdown-mode docker-compose-mode dockerfile-mode monokai-theme solarized-theme zenburn-theme hcl-mode go-mode groovy-mode yaml-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -51,10 +53,14 @@
 ;; Load the Monokai Theme
 (load-theme 'monokai t)
 
-;; Emacs Indentation
-
+;; Enable backtraces on errors
 (setq debug-on-error t)
 
+;; Enable Tab Bar mode
+(require 'tabbar)
+(tabbar-mode t)
+
+;; Emacs Indentation
 (setq-default tab-width 2)
 (setq-default indent-tabs-mode nil)
 
@@ -99,9 +105,9 @@
 (setq column-number-mode t)
 
 ;; Line length limit
-(require 'whitespace)
-(setq whitespace-line-column 80) ;; limit line length
-(setq whitespace-style '(face lines-tail))
+;; Breaks whitespace-cleanup
+;; (require 'whitespace)
+;; (setq whitespace-line-column 80) ;; limit line length
+;; (setq whitespace-style '(face lines-tail))
 
-(add-hook 'prog-mode-hook 'whitespace-mode)
-
+;; (add-hook 'prog-mode-hook 'whitespace-mode)
