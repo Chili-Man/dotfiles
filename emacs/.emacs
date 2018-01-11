@@ -20,6 +20,18 @@
 ;;  yafolding
 ;;  origami
 
+;; For Go mode
+;; go mode
+;; (add-to-list 'load-path "~/.emacs.d/plugins/go-mode.el")
+;;(require 'go-mode-autoloads)
+
+;;(add-hook 'go-mode-hook
+;;         (lambda ()
+;;          (add-hook 'before-save-hook 'gofmt-before-save)
+;;          (setq tab-width 4)
+;;          (setq indent-tabs-mode 1)))
+
+
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
