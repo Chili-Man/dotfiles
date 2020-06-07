@@ -12,17 +12,14 @@ sudo apt-get install \
      terminator \
      chromium-browser \
      libgnome-keyring-dev \
-     compizconfig-settings-manager \
      stow \
      curl \
-     python-pip \
      qalculate \
      htop \
      jq \
      build-essential \
-     libssl-dev \
-     libreadline-dev \
-     libpq-dev
+     pwgen \
+     xkcdpass
 
 # Generate new GPG key for signing on GitHub
 gpg --full-gen-key
@@ -36,24 +33,11 @@ sleep 60
 # For securely storing the GitHub personal access token
 sudo make --directory=/usr/share/doc/git/contrib/credential/gnome-keyring
 git config --global credential.helper /usr/share/doc/git/contrib/credential/gnome-keyring/git-credential-gnome-keyring
-git config --global user.email "drodriguez@opengov.com"
+git config --global user.email "dr.elhombrechile@gmail.com"
 git config --global user.name "Diego Rodriguez"
 git config --global commit.gpgsign true
 
 # Generate a new ssh key for GitHub and AWS
-ssh-keygen -t rsa -b 4096 -C 'drodriguez@opengov.com' -f "${HOME}/.ssh/github"
-ssh-keygen -t rsa -b 4096 -C 'drodriguez@opengov.com' -f "${HOME}/.ssh/aws"
+ssh-keygen -t rsa -b 4096 -C 'dr.elhombrechile@gmail.com' -f "${HOME}/.ssh/github"
+ssh-keygen -t rsa -b 4096 -C 'dr.elhombrechile@gmail.com' -f "${HOME}/.ssh/aws"
 
-# Install SDKs
-## rbenv
-git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-cd ~/.rbenv && src/configure && make -C src
-cd "${HOME}"
-echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
-echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-
-mkdir -p "$(rbenv root)"/plugins
-git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
-
-
-# Need to install Docker, Vagrant, Terraform
