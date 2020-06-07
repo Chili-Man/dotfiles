@@ -19,7 +19,12 @@ sudo apt-get install \
      jq \
      build-essential \
      pwgen \
-     xkcdpass
+     xkcdpass \
+     gnome-tweaks
+     
+# For multiple workspaces we need https://extensions.gnome.org/extension/1485/workspace-matrix/
+# For this limited piece of the feature there is a workaround currently in GNOME desktop. 
+# Disable workspaces-only-on-primary (gnome-tweaks has the ability to quickly change this setting) so that workspaces will spin all displays. 
 
 # Generate new GPG key for signing on GitHub
 gpg --full-gen-key
