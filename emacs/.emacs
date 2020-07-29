@@ -1,13 +1,3 @@
-;; Add MELPA
-(require 'package)
-(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                    (not (gnutls-available-p))))
-       (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
-  (add-to-list 'package-archives (cons "melpa" url) t))
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/")))
-
 ;; Packages to install:
 ;;  zenburn-theme
 ;;  monokai-theme
@@ -19,23 +9,26 @@
 ;;  docker-compose-mode
 ;;  yafolding
 ;;  origami
+;;  company
+;;  tabnine - see https://github.com/TommyX12/company-tabnine
+;;  tabbar
+;;  markdown-mode
 
-;; For Go mode
-;; go mode
-;; (add-to-list 'load-path "~/.emacs.d/plugins/go-mode.el")
-;;(require 'go-mode-autoloads)
-
-;;(add-hook 'go-mode-hook
-;;         (lambda ()
-;;          (add-hook 'before-save-hook 'gofmt-before-save)
-;;          (setq tab-width 4)
-;;          (setq indent-tabs-mode 1)))
-
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
+(require 'package)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  (when no-ssl (warn "\
+Your version of Emacs does not support SSL connections,
+which is unsafe because it allows man-in-the-middle attacks.
+There are two things you can do about this warning:
+1. Install an Emacs version that does support SSL and be safe.
+2. Remove this warning from your init file so you won't see it again."))
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
+  ;; and `package-pinned-packages`. Most users will not need or want to do this.
+  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+  )
 (package-initialize)
 
 (custom-set-variables
@@ -43,39 +36,25 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff" "#eeeeec"])
+ '(column-number-mode t)
  '(cua-mode t nil (cua-base))
- '(custom-safe-themes
-   (quote
-    ("3629b62a41f2e5f84006ff14a2247e679745896b5eaa1d5bcfbc904a3441b0cd" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "67e998c3c23fe24ed0fb92b9de75011b92f35d3e89344157ae0d544d50a63a72" default)))
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (yafolding tabbar markdown-mode docker-compose-mode dockerfile-mode monokai-theme solarized-theme zenburn-theme hcl-mode go-mode groovy-mode yaml-mode))))
+    (gitignore-mode typescript-mode markdown-mode nixpkgs-fmt nix-mode tabbar company-terraform company-tabnine company origami yafolding dockerfile-mode yaml-mode groovy-mode go-mode hcl-mode monokai-theme)))
+ '(show-paren-mode t)
+ '(size-indication-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Courier 10 Pitch" :foundry "bitstream" :slant normal :weight normal :height 98 :width normal)))))
+ '(default ((t (:family "Ubuntu Mono" :foundry "DAMA" :slant normal :weight normal :height 128 :width normal)))))
 
-;; Load the Monokai Theme
-(load-theme 'monokai t)
-
-;; Enable backtraces on errors
-(setq debug-on-error t)
-
-;; Enable Tab Bar mode
-(require 'tabbar)
-(tabbar-mode t)
-
+;;;; Customizations
 ;; Emacs Indentation
 (setq-default tab-width 2)
 (setq-default indent-tabs-mode nil)
-
 (defun my-setup-indent (n)
   ;; java/c/c++
   (setq-local c-basic-offset n)
@@ -87,6 +66,8 @@
   (setq-local coffee-tab-width n) ; coffeescript
   (setq-local javascript-indent-level n) ; javascript-mode
   (setq-local js-indent-level n) ; js-mode
+  (setq-default typescript-indent-level 2); typescript mode
+  (setq-default sh-basic-offset 2); shell mode
   (setq-local js2-basic-offset n) ; js2-mode, in latest js2-mode, it's alias of js-indent-level
   (setq-local web-mode-markup-indent-offset n) ; web-mode, html tag in html file
   (setq-local web-mode-css-indent-offset n) ; web-mode, css in html file
@@ -95,31 +76,53 @@
   )
 (defun my-personal-code-style ()
   (interactive)
-  (message "My personal code style!")
   ;; use space instead of tab
   (setq indent-tabs-mode nil)
   ;; indent 2 spaces width
   (my-setup-indent 2))
-
-;; prog-mode-hook requires emacs24+
 (add-hook 'prog-mode-hook 'my-personal-code-style)
 
-;; Truncate Long lines
-(set-default 'truncate-lines t)
-
-;; Recognize .tf as HCL mode
-(add-to-list 'auto-mode-alist '("\\.tf\\'" . hcl-mode))
+;; Load the Monokai Theme
+(load-theme 'monokai t)
 
 ;; Highlight matching parenthesis
 (show-paren-mode 1)
 
+;; Truncate Long lines
+(set-default 'truncate-lines t)
+
 ;; Display column number
 (setq column-number-mode t)
 
-;; Line length limit
-;; Breaks whitespace-cleanup
-;; (require 'whitespace)
-;; (setq whitespace-line-column 80) ;; limit line length
-;; (setq whitespace-style '(face lines-tail))
+;; Recognize .tf as HCL mode
+(add-to-list 'auto-mode-alist '("\\.tf\\'" . hcl-mode))
 
-;; (add-hook 'prog-mode-hook 'whitespace-mode)
+;; Recognize typescript
+(add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescript-mode))
+
+;; Enable Tab Bar mode
+(require 'tabbar)
+(tabbar-mode t)
+
+;; Autocompleting
+(require 'company-tabnine)
+(add-to-list 'company-backends #'company-tabnine)
+(add-hook 'after-init-hook 'global-company-mode) ;; Enable company mode in all buffers
+(setq company-idle-delay 0) ;; Trigger completion immediately.
+(setq company-show-numbers t) ;; Number the candidates (use M-1, M-2 etc to select completions).
+
+;; Use the tab-and-go frontend.
+;; Allows TAB to select and complete at the same time.
+;; (company-tng-configure-default)
+;; (setq company-frontends
+;;       '(company-tng-frontend
+;;         company-pseudo-tooltip-frontend
+;;         company-echo-metadata-frontend))
+
+;; Autocomplete for terraform
+(require 'company-terraform)
+(company-terraform-init)
+
+;; For Nix auto formatting
+(add-hook 'nix-mode-hook 'nixpkgs-fmt-on-save-mode)
+(put 'downcase-region 'disabled nil)
