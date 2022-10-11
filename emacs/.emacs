@@ -4,6 +4,7 @@
 ;;  hcl-mode
 ;;  go-mode
 ;;  groovy-mode
+;;  flycheck, go mode
 ;;  yaml-mode
 ;;  dockerfile-mode
 ;;  docker-compose-mode
@@ -41,7 +42,7 @@ There are two things you can do about this warning:
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (gitignore-mode typescript-mode markdown-mode nixpkgs-fmt nix-mode tabbar company-terraform company-tabnine company origami yafolding dockerfile-mode yaml-mode groovy-mode go-mode hcl-mode monokai-theme)))
+    (terraform-mode flycheck-golangci-lint flycheck gitignore-mode typescript-mode markdown-mode nixpkgs-fmt nix-mode tabbar company-terraform company origami yafolding dockerfile-mode yaml-mode groovy-mode go-mode hcl-mode monokai-theme)))
  '(show-paren-mode t)
  '(size-indication-mode t))
 (custom-set-faces
@@ -82,6 +83,18 @@ There are two things you can do about this warning:
   (my-setup-indent 2))
 (add-hook 'prog-mode-hook 'my-personal-code-style)
 
+;; Go format on save
+(defun my-go-mode-hook ()
+      (setq tab-width 2 indent-tabs-mode 1)
+      ; eldoc shows the signature of the function at point in the status bar.
+      (go-eldoc-setup)
+      (local-set-key (kbd "M-.") #'godef-jump)
+      (add-hook 'before-save-hook 'gofmt-before-save))
+(add-hook 'go-mode-hook 'my-go-mode-hook)
+
+; As-you-type error highlighting
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
 ;; Load the Monokai Theme
 (load-theme 'monokai t)
 
@@ -105,11 +118,14 @@ There are two things you can do about this warning:
 (tabbar-mode t)
 
 ;; Autocompleting
-(require 'company-tabnine)
-(add-to-list 'company-backends #'company-tabnine)
-(add-hook 'after-init-hook 'global-company-mode) ;; Enable company mode in all buffers
-(setq company-idle-delay 0) ;; Trigger completion immediately.
-(setq company-show-numbers t) ;; Number the candidates (use M-1, M-2 etc to select completions).
+;; (require 'company-tabnine)
+;; (add-to-list 'company-backends #'company-tabnine)
+;; (add-hook 'after-init-hook 'global-company-mode) ;; Enable company mode in all buffers
+;; (setq company-idle-delay 0) ;; Trigger completion immediately.
+;; (setq company-show-numbers t) ;; Number the candidates (use M-1, M-2 etc to select completions).
+
+;; Auto refresh updated files from disk
+(global-auto-revert-mode t)
 
 ;; Use the tab-and-go frontend.
 ;; Allows TAB to select and complete at the same time.
@@ -126,3 +142,4 @@ There are two things you can do about this warning:
 ;; For Nix auto formatting
 (add-hook 'nix-mode-hook 'nixpkgs-fmt-on-save-mode)
 (put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
