@@ -6,6 +6,7 @@ sudo apt-get update
 sudo apt-get install \
      emacs \
      vim \
+     bless \
      git \
      git-cola \
      meld \
@@ -17,11 +18,22 @@ sudo apt-get install \
      qalculate \
      htop \
      jq \
+     obs-studio \
      build-essential \
      pwgen \
      xkcdpass \
+     steam \
+     wireshark \
      gnome-tweaks \
+     clamd \
+     clamav-daemon \
      qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils virt-manager
+
+# Other software to install
+# Burpsuite
+# OpenSnitch
+# KSE (key store explorer)
+# sdk-man
 
 # In order to manage VMs without root privileges, we need to add current user to
 # two groups
@@ -33,6 +45,6 @@ sudo adduser "$(whoami)" libvirt-qemu
 # Disable workspaces-only-on-primary (gnome-tweaks has the ability to quickly change this setting) so that workspaces will spin all displays.
 
 # For securely storing the GitHub personal access token
-git config --global user.email "dr.elhombrechile@gmail.com"
+git config --global user.email "diego@rodilla.me"
 git config --global user.name "Diego Rodriguez"
 git config --global commit.gpgsign true
