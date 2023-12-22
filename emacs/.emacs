@@ -14,6 +14,8 @@
 ;;  tabnine - see https://github.com/TommyX12/company-tabnine
 ;;  tabbar
 ;;  markdown-mode
+;;  web-mode
+
 
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
@@ -143,3 +145,16 @@ There are two things you can do about this warning:
 (add-hook 'nix-mode-hook 'nixpkgs-fmt-on-save-mode)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
+
+;; Syntax highlight mode for Helm chart templates (and go templates)
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(setq web-mode-engines-alist
+      '(("go"    . "\\.tpl\\'")))
+
+;; For Nix auto formatting
+(add-hook 'nix-mode-hook 'nixpkgs-fmt-on-save-mode)
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+
