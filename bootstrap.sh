@@ -48,3 +48,8 @@ sudo adduser "$(whoami)" libvirt-qemu
 git config --global user.email "diego@rodilla.me"
 git config --global user.name "Diego Rodriguez"
 git config --global commit.gpgsign true
+
+
+# For Workspace Matrix (Grid and Column workspaces)
+# https://extensions.gnome.org/extension/1485/workspace-matrix/
+# https://wiki.gnome.org/action/show/Projects/GnomeShellIntegration/Installation?action=show&redirect=Projects%2FGnomeShellIntegrationForChrome%2FInstallation

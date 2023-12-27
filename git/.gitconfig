@@ -1,0 +1,22 @@
+[user]
+  signingkey = E0EBAD78F0190BD9
+  email = diego@rodilla.me
+  name = Diego Rodriguez
+[commit]
+  gpgsign = true
+[cola]
+  spellcheck = false
+[core]
+  editor = emacs
+[credential]
+  helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
+
+
+[diff]
+    tool = meld
+
+[difftool]
+    prompt = false
+
+[difftool "meld"]
+    cmd = meld "$LOCAL" "$REMOTE"
