@@ -8,6 +8,7 @@
 
 [init]
   defaultBranch = main
+  cleanup = whitespace
 
 [cola]
   spellcheck = false
@@ -26,3 +27,12 @@
 
 [difftool "meld"]
   cmd = meld "$LOCAL" "$REMOTE"
+
+[rerere]
+  enabled = true
+
+[column]
+  ui = auto
+
+[branch]
+  sort = -committerdate
