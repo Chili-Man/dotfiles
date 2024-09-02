@@ -15,7 +15,7 @@ sudo apt-get install \
      libgnome-keyring-dev \
      stow \
      curl \
-     qalculate \
+     qalculate-gtks \
      htop \
      jq \
      obs-studio \
@@ -34,6 +34,11 @@ sudo apt-get install \
 # OpenSnitch
 # KSE (key store explorer)
 # sdk-man
+# Nix package manager
+# With Nix flakes: https://github.com/Misterio77/nix-starter-configs?tab=readme-ov-file  # use minimal version
+# ripgrep
+# https://github.com/tsenart/vegeta
+# Starship cli tool
 
 # In order to manage VMs without root privileges, we need to add current user to
 # two groups
