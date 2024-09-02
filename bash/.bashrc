@@ -118,7 +118,12 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-export GPG_TTY=$(tty)
+
+#### GPG
+export GPG_TTY="$(tty)"
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+gpgconf --launch gpg-agent
+gpg-connect-agent updatestartuptty /bye > /dev/null
 
 #### Default editor
 export EDITOR='emacs'
