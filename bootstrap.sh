@@ -39,6 +39,7 @@ sudo apt-get install \
 # ripgrep
 # https://github.com/tsenart/vegeta
 # Starship cli tool
+# https://github.com/git-ecosystem/git-credential-manager
 
 # In order to manage VMs without root privileges, we need to add current user to
 # two groups
