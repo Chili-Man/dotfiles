@@ -19,6 +19,9 @@ shopt -s histappend
 HISTSIZE=10000
 HISTFILESIZE=20000
 
+# Igonore Common commands in shell history
+HISTIGNORE="&:ls:[bf]g:exit:pwd:clear:mount:umount:[ \t]*"
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -120,29 +123,45 @@ export GPG_TTY=$(tty)
 #### Default editor
 export EDITOR='emacs'
 
-#### Load customized environment variables
-source "${HOME}/environment.sh"
+##### Software
+SOFTWARE_BASE_DIR="${HOME}/software"
 
-##### Chef
-export CHEF_SERVER_URL='https://api.chef.io/organizations/${OG_CHEF_ORGANIZATION}'
-export CHEF_WORKSTATION_HOME="${HOME}/opengov/chef_kitchen"
-export CHEF_CLIENT_USER="${OG_CHEF_USER}"
-export CHEF_CLIENT_KEY_PATH="${HOME}/.chef/${CHEF_CLIENT_USER}.pem"
-export CHEF_VALIDATION_CLIENT_NAME="${CHEF_CLIENT_USER}"
-export CHEF_VALIDATION_KEY_PATH="${CHEF_CLIENT_KEY_PATH}"
 
-# Base external path for binaries
-BASE_EXTERNAL_PACKAGES="${HOME}/software"
+##### AWS
+function aws_assume_role() {
+  # set -x
+  local role_arn="${1:?'Need to provide AWS IAM Role ARN to assume'}"
+  local echo_exports="${2:-false}"
 
-##### Hashicorp
-TERRAFORM_VERSION='0.10.7'
-export PATH="${PATH}:${BASE_EXTERNAL_PACKAGES}/terraform/${TERRAFORM_VERSION}"
+  # Get the temporary credentials
+  local credentials=$(aws sts assume-role --role-arn "${role_arn}" --role-session-name diego.rodriguez)
 
-##### rbenv
-export PATH="${HOME}/.rbenv/bin:${PATH}"
-eval "$(rbenv init -)"
+  # Export the credentials to the shell so we can use them
+  export AWS_ACCESS_KEY_ID=$(jq -M -r '.Credentials.AccessKeyId' <<< "${credentials}")
+  export AWS_SECRET_ACCESS_KEY=$(jq -M -r '.Credentials.SecretAccessKey' <<< "${credentials}")
+  export AWS_SESSION_TOKEN=$(jq -M -r '.Credentials.SessionToken' <<< "${credentials}")
 
-##### sdk
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/habanero/.sdkman"
-[[ -s "${HOME}/.sdkman/bin/sdkman-init.sh" ]] && source "${HOME}/.sdkman/bin/sdkman-init.sh"
+  # Print out the exports if requested
+  if [ "${echo_exports}" != 'false' ]; then
+    echo "export AWS_ACCESS_KEY_ID='${AWS_ACCESS_KEY_ID}'"
+    echo "export AWS_SECRET_ACCESS_KEY='${AWS_SECRET_ACCESS_KEY}'"
+    echo "export AWS_SESSION_TOKEN='${AWS_SESSION_TOKEN}'"
+  fi
+
+  # set +x
+  # Verify that we're now the assumed role
+  aws sts get-caller-identity
+}
+
+##### Mikrotik
+# CRS 328
+function mikrotik_crs328_console() {
+  screen /dev/cu.usbserial-AQ049WLD 115200
+}
+
+function mikrotik_crs310_console() {
+  screen /dev/cu.usbserial-B001W3VJ 115200
+}
+
+# For Starship
+eval "$(starship init bash)"
