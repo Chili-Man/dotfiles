@@ -1,5 +1,4 @@
-;; Packages to install:
-;;  zenburn-theme
+;;; Commentary:  Packages to install:
 ;;  monokai-theme
 ;;  hcl-mode
 ;;  go-mode
@@ -8,32 +7,26 @@
 ;;  yaml-mode
 ;;  dockerfile-mode
 ;;  docker-compose-mode
+;;  gitignore-mode
+;;  groovy-mode
 ;;  yafolding
 ;;  origami
-;;  company
-;;  tabnine - see https://github.com/TommyX12/company-tabnine
+;;  nix-mode
 ;;  tabbar
 ;;  markdown-mode
 ;;  web-mode
 
-
+;;;;; Melpa
 (require 'package)
-(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                    (not (gnutls-available-p))))
-       (proto (if no-ssl "http" "https")))
-  (when no-ssl (warn "\
-Your version of Emacs does not support SSL connections,
-which is unsafe because it allows man-in-the-middle attacks.
-There are two things you can do about this warning:
-1. Install an Emacs version that does support SSL and be safe.
-2. Remove this warning from your init file so you won't see it again."))
-  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-  ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
-  ;; and `package-pinned-packages`. Most users will not need or want to do this.
-  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
-  )
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
+;; and `package-pinned-packages`. Most users will not need or want to do this.
+;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
+;; Settings
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -44,7 +37,7 @@ There are two things you can do about this warning:
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (terraform-mode flycheck-golangci-lint flycheck gitignore-mode typescript-mode markdown-mode nixpkgs-fmt nix-mode tabbar company-terraform company origami yafolding dockerfile-mode yaml-mode groovy-mode go-mode hcl-mode monokai-theme)))
+    (json-mode python-mode terraform-mode flycheck-golangci-lint flycheck gitignore-mode typescript-mode markdown-mode nixpkgs-fmt nix-mode tabbar origami yafolding dockerfile-mode yaml-mode groovy-mode go-mode hcl-mode monokai-theme)))
  '(show-paren-mode t)
  '(size-indication-mode t))
 (custom-set-faces
@@ -119,27 +112,8 @@ There are two things you can do about this warning:
 (require 'tabbar)
 (tabbar-mode t)
 
-;; Autocompleting
-;; (require 'company-tabnine)
-;; (add-to-list 'company-backends #'company-tabnine)
-;; (add-hook 'after-init-hook 'global-company-mode) ;; Enable company mode in all buffers
-;; (setq company-idle-delay 0) ;; Trigger completion immediately.
-;; (setq company-show-numbers t) ;; Number the candidates (use M-1, M-2 etc to select completions).
-
 ;; Auto refresh updated files from disk
 (global-auto-revert-mode t)
-
-;; Use the tab-and-go frontend.
-;; Allows TAB to select and complete at the same time.
-;; (company-tng-configure-default)
-;; (setq company-frontends
-;;       '(company-tng-frontend
-;;         company-pseudo-tooltip-frontend
-;;         company-echo-metadata-frontend))
-
-;; Autocomplete for terraform
-(require 'company-terraform)
-(company-terraform-init)
 
 ;; For Nix auto formatting
 (add-hook 'nix-mode-hook 'nixpkgs-fmt-on-save-mode)
@@ -158,3 +132,12 @@ There are two things you can do about this warning:
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
+;; Allow symlinks to be automatically followed
+(setq vc-follow-symlinks nil)
+
+
+;; Case insensitive line sort
+(defun sort-lines-nocase ()
+  (interactive)
+  (let ((sort-fold-case t))
+    (call-interactively 'sort-lines)))
