@@ -4,13 +4,12 @@
 ;;  go-mode
 ;;  groovy-mode
 ;;  flycheck, go mode
+;;  flycheck-golangci-lint
+;;  flycheck-pycheckers
 ;;  yaml-mode
 ;;  dockerfile-mode
 ;;  docker-compose-mode
-;;  gitignore-mode
 ;;  groovy-mode
-;;  yafolding
-;;  origami
 ;;  nix-mode
 ;;  tabbar
 ;;  markdown-mode
@@ -37,7 +36,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (json-mode python-mode terraform-mode flycheck-golangci-lint flycheck gitignore-mode typescript-mode markdown-mode nixpkgs-fmt nix-mode tabbar origami yafolding dockerfile-mode yaml-mode groovy-mode go-mode hcl-mode monokai-theme)))
+    (json-mode python-mode terraform-mode flycheck-golangci-lint flycheck typescript-mode markdown-mode nixpkgs-fmt nix-mode tabbar dockerfile-mode yaml-mode groovy-mode go-mode hcl-mode monokai-theme)))
  '(show-paren-mode t)
  '(size-indication-mode t))
 (custom-set-faces
@@ -122,10 +121,10 @@
 
 ;; Syntax highlight mode for Helm chart templates (and go templates)
 (require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(setq web-mode-engines-alist
-      '(("go"    . "\\.tpl\\'")))
+;; (setq web-mode-engines-alist
+;;      '(("go"    . "\\.tpl\\'")))
 
 ;; For Nix auto formatting
 (add-hook 'nix-mode-hook 'nixpkgs-fmt-on-save-mode)
@@ -141,3 +140,12 @@
   (interactive)
   (let ((sort-fold-case t))
     (call-interactively 'sort-lines)))
+
+;; Flycheck golangci-lint
+(eval-after-load 'flycheck
+      '(add-hook 'flycheck-mode-hook #'flycheck-golangci-lint-setup))
+
+;; flycheck-pycheckers
+(global-flycheck-mode 1)
+(with-eval-after-load 'flycheck
+  (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup))
