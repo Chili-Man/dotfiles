@@ -7,6 +7,7 @@
 ;;  flycheck-golangci-lint
 ;;  flycheck-pycheckers
 ;;  yaml-mode
+;;  git-modes
 ;;  dockerfile-mode
 ;;  docker-compose-mode
 ;;  groovy-mode
@@ -36,7 +37,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (json-mode python-mode terraform-mode flycheck-golangci-lint flycheck typescript-mode markdown-mode nixpkgs-fmt nix-mode tabbar dockerfile-mode yaml-mode groovy-mode go-mode hcl-mode monokai-theme)))
+    (json-mode python-mode terraform-mode flycheck-golangci-lint flycheck git-modes typescript-mode markdown-mode nixpkgs-fmt nix-mode tabbar dockerfile-mode yaml-mode groovy-mode go-mode hcl-mode monokai-theme)))
  '(show-paren-mode t)
  '(size-indication-mode t))
 (custom-set-faces

@@ -42,6 +42,8 @@ sudo apt-get install \
 # https://github.com/git-ecosystem/git-credential-manager
 # Install FiraMono font
 # https://www.nerdfonts.com/#features
+# Docker , don't use nix because it doesn't work well
+# https://www.granted.dev/
 
 # In order to manage VMs without root privileges, we need to add current user to
 # two groups
