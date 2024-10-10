@@ -115,6 +115,9 @@
 ;; Auto refresh updated files from disk
 (global-auto-revert-mode t)
 
+;; Add linue numbers on the side
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
 ;; For Nix auto formatting
 (add-hook 'nix-mode-hook 'nixpkgs-fmt-on-save-mode)
 (put 'downcase-region 'disabled nil)
